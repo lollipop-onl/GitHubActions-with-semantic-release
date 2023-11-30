@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: refs/tagas/${{ needs.release.outputs.tag-name }}
+          ref: ${{ needs.release.outputs.tag-name }}
 
       - name: setup git user
         run: |
