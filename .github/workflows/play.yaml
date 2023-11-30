@@ -1,0 +1,8 @@
+name: Play
+on:
+  workflow_dispatch:
+jobs:
+  play:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: lollipop-onl/GitHubActions-with-semantic-release@main

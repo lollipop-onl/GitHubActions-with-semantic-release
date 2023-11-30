@@ -1,0 +1,5 @@
+name: GitHub Actions with semantic-release
+description: Playgroud for GitHub Actions with semantic-release
+runs:
+  using: node20
+  main: main.js

@@ -1,0 +1,7 @@
+{
+  "name": "github-actions-with-semantic-release",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.11.0",
+  "license": "MIT"
+}
