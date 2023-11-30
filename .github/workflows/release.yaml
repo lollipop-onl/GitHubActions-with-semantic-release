@@ -13,6 +13,8 @@ jobs:
       issues: write
       pull-requests: write
       id-token: write
+    outputs:
+      tag-name: ${{ steps.released.outputs.tag-name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -39,7 +41,7 @@ jobs:
 
       - name: update major tag
         run: |
-          export TAG_NAME="${{ needs.release.outputs.released.tag-name }}"
+          export TAG_NAME="${{ needs.release.outputs.tag-name }}"
           export TAG_MAJOR="${TAG_NAME%%.*}"
           git tag --force -a "${TAG_MAJOR}" -m "Release ${TAG_NAME}"
           git push --force origin "${TAG_MAJOR}"
