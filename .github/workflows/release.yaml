@@ -25,7 +25,9 @@ jobs:
 
       - name: get released tag
         id: released
-        run: echo "tag-name=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        run: |
+          echo "tag-name: $(git describe --tags --abbrev=0)"
+          echo "tag-name=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
   update-major-tag:
     needs: release
