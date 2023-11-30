@@ -36,6 +36,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: refs/tagas/${{ needs.release.outputs.tag-name }}
 
       - name: setup git user
         run: |
@@ -49,3 +51,8 @@ jobs:
           export TAG_MAJOR="${TAG_NAME%%.*}"
           git tag --force -a "${TAG_MAJOR}" -m "Release ${TAG_NAME}"
           git push --force origin "${TAG_MAJOR}"
+
+      - name: update latest tag
+        run: |
+          git tag --force -a "latest" -m "Release Latest"
+          git push --force origin "latest"
