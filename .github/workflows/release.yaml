@@ -29,6 +29,9 @@ jobs:
           echo "tag-name: $(git describe --tags --abbrev=0)"
           echo "tag-name=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
+      - run: |
+          echo "released: ${{ steps.released.outputs.tag-name }}"
+
   update-major-tag:
     needs: release
     runs-on: ubuntu-latest
