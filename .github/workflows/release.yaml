@@ -15,13 +15,18 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Release with semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
 
+      - name: get released tag
+        id: released
+        run: echo "tag-name=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
   update-major-tag:
+    needs: release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +39,7 @@ jobs:
 
       - name: update major tag
         run: |
-          export TAG_NAME="${GITHUB_REF##refs/tags/}"
+          export TAG_NAME="${{ needs.release.outputs.released.tag-name }}"
           export TAG_MAJOR="${TAG_NAME%%.*}"
           git tag --force -a "${TAG_MAJOR}" -m "Release ${TAG_NAME}"
           git push --force origin "${TAG_MAJOR}"
