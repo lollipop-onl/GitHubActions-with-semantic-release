@@ -4,15 +4,11 @@ on:
     branches:
       - main
 permissions:
-  contents: read
+  contents: write
+  id-token: write
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-      id-token: write
     outputs:
       tag-name: ${{ steps.released.outputs.tag-name }}
     steps:
@@ -31,9 +27,6 @@ jobs:
   update-major-tag:
     needs: release
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -51,6 +44,20 @@ jobs:
           export TAG_MAJOR="${TAG_NAME%%.*}"
           git tag --force -a "${TAG_MAJOR}" -m "Release ${TAG_NAME}"
           git push --force origin "${TAG_MAJOR}"
+
+  update-latest-tag:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release.outputs.tag-name }}
+
+      - name: setup git user
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
 
       - name: update latest tag
         run: |
